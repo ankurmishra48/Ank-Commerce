@@ -9,10 +9,11 @@ public class DbCon {
     private static Connection connection = null;
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
-        if (connection == null || connection.isClosed()) {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/ecommerce_cart", "root", "0408");
+       if (connection == null || connection.isClosed()) {
+        	Class.forName("com.mysql.cj.jdbc.Driver");
+        	connection = DriverManager.getConnection(
+        	    "jdbc:mysql://localhost:3306/ecommerce_cart", "root", "0408");
+
             
             System.out.println("Connected");
         }

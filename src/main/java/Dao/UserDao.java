@@ -37,6 +37,21 @@ public User userlogin(String email,String password) {
 	return user;
 }
 
+public boolean registerUser(User user) {
+    boolean result = false;
+    try {
+        String query = "INSERT INTO users(name, email, password) VALUES (?, ?, ?)";
+        PreparedStatement ps = this.conn.prepareStatement(query);
+        ps.setString(1, user.getName());
+        ps.setString(2, user.getEmail());
+        ps.setString(3, user.getPassword());
+        int rows = ps.executeUpdate();
+        result = rows > 0;
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return result;
+}
 
 
 

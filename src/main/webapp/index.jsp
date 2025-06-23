@@ -14,10 +14,18 @@
 	 request.setAttribute("auth",auth);
  }
  %>   
- <%  
-    ProductDao pd=new ProductDao(DbCon.getConnection());
-    List<Product> products=pd.getAllProducts();
-    %> 
+<%
+    List<Product> products = null;
+    try {
+        ProductDao pd = new ProductDao(DbCon.getConnection());
+        products = pd.getAllProducts();
+    } catch (Exception e) {
+        out.println("<p style='color:red;'>Error loading products: " + e.getMessage() + "</p>");
+        e.printStackTrace(); // Shows exact line of failure in server logs
+    }
+%>
+
+
        <%
     // Fix EL access: set 'cartlist' (no hyphen) for navbar
     java.util.ArrayList<model.Cart> cartlist = (java.util.ArrayList<model.Cart>) session.getAttribute("cart-list");
@@ -40,9 +48,9 @@
  <div class="container">
  <div class="card-header my-3">All Products</div>
  <div class="row">
- <%
-  if (!products.isEmpty()) {
-     for (Product p : products) { %>
+ 
+ <% if (products != null && !products.isEmpty()) { %>
+ <% for (Product p : products) { %>
      <div class="col-md-3"> 
          <div class="card w-100" style="width: 18rem;">
 <img src="product-image/<%=p.getImage()%>" class="card-img-top" alt="..." style="width:100%; height:200px; object-fit:cover;">
@@ -57,9 +65,12 @@
              </div>
          </div>
      </div>
-<%   }
-   }
-%>
+<% } %>
+<% } else { %>
+    <div class="col-md-12 text-center">
+        <h5>No products found or error occurred.</h5>
+    </div>
+<% } %>
 
  
  
